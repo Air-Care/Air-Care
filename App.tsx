@@ -1,21 +1,44 @@
 import React from 'react';
+import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-
-const colors: Array<string> = [
-  'rgba(0,30,255, 0.9)',
-  'rgba(0, 221, 255, 0.9)',
-  'rgba(255, 220, 0, 0.9)',
-  'rgba(237, 124, 19, 0.9)',
-  'rgba(255, 25, 0, 0.9)',
-];
-
-let x: number = 3;
-let y: number;
-
-y = colors[x + 1] ? x + 1 : x - 1;
+import AirQuality from './AirQuality';
 
 export default function App() {
+  const [airQuality, setAirQuality] = useState('');
+
+  const testLocation: any = {
+    latitude: 34.0522,
+    longitude: 118.2437,
+  };
+
+  const query = `
+    query {
+      Location(id: ${testLocation}){
+        airQuality
+      }
+    }
+  `;
+
+  const url = 'graphQL enpoints';
+
+  const opts = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query }),
+  };
+
+  fetch(url, opts)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      if (data) {
+        setAirQuality(data);
+      } else {
+        console.log('Cannon Retrieve Air Quality Data');
+      }
+    });
+
   return (
     <View
       style={{
@@ -25,27 +48,7 @@ export default function App() {
         backgroundColor: 'white',
       }}
     >
-      <LinearGradient
-        // Background Linear Gradient
-        colors={[colors[x], colors[y]]}
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 0,
-          height: '100%',
-        }}
-      />
-
-      <Text
-        style={{
-          backgroundColor: 'transparent',
-          fontSize: 18,
-          color: '#fff',
-        }}
-      >
-        ______ Air Quality
-      </Text>
+      <AirQuality num={1} />
     </View>
   );
 }
