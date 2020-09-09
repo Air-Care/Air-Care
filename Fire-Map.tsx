@@ -11,28 +11,7 @@ type CoordProps = {
 
 const FireMap: FunctionComponent<CoordProps> = ({latitude, longitude}) => {
 
-	// let firesArray = [];
-
-	// const QUERY = gql`
-  // {
-  //   reports(latitude: latitude, longitude: longitude) {
-  //     fire
-	// 		aqi
-  //   }
-  // }
-	// `;
-
-	// function Query() {
-	// 	const { loading, error, data } = useQuery(QUERY);
-
-	// 	if (loading) return <Text style={styles.text}>Loading...</Text>;
-	// 	if (error) return <Text style={styles.text}>Error :</Text>;
-
-	// 	firesArray = data.report.fires;
-	// 	console.log(firesArray)
-	// }
-
-	// Query();
+	// let fires/
 
 
 	return (
@@ -49,6 +28,7 @@ const FireMap: FunctionComponent<CoordProps> = ({latitude, longitude}) => {
 			// 	this.mapRef.fitToCoordinates()
 			// }}
 			>
+
 			<Marker
 			coordinate={{
 				latitude: latitude,
@@ -61,6 +41,7 @@ const FireMap: FunctionComponent<CoordProps> = ({latitude, longitude}) => {
 				<View style={styles.currentLocation} />
 			</View>
 			</Marker>
+
 			<Marker
 			coordinate={{
 				latitude: 34.2535129895,
@@ -73,6 +54,7 @@ const FireMap: FunctionComponent<CoordProps> = ({latitude, longitude}) => {
 				<View style={styles.fire} />
 			</View>
 			</Marker>
+
 			<Marker
 			coordinate={{
 				latitude: 34.2863373684,
@@ -85,6 +67,7 @@ const FireMap: FunctionComponent<CoordProps> = ({latitude, longitude}) => {
 				<View style={styles.fire} />
 			</View>
 			</Marker>
+			
 			</MapView>
 		</View>
 	);
