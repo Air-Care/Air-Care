@@ -1,8 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import AirQuality from './AirQuality';
+import FireMap from './Fire-Map';
+import AirQuality from './AirQuality'
+
 
 export default function App() {
   const [airQuality, setAirQuality] = useState('');
@@ -13,14 +14,14 @@ export default function App() {
   };
 
   const query = `
-    query {
-      Location(id: ${testLocation}){
-        airQuality
+    {
+      greeting (name:"Kevin"){
+        salutation
       }
     }
   `;
 
-  const url = 'graphQL enpoints';
+  const url = 'https://evening-waters-26376.herokuapp.com/graphql';
 
   const opts = {
     method: 'POST',
@@ -33,22 +34,16 @@ export default function App() {
     .then((data) => {
       console.log(data);
       if (data) {
-        setAirQuality(data);
+        setAirQuality(JSON.stringify(data));
       } else {
         console.log('Cannon Retrieve Air Quality Data');
       }
     });
 
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-      }}
-    >
-      <AirQuality num={1} />
+    <View style={styles.container}>
+      <Text>{airQuality}</Text>
+      {/* <FireMap/> */}
     </View>
   );
 }
