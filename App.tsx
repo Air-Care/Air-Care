@@ -1,53 +1,60 @@
 import React from 'react';
-import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import FireMap from './Fire-Map';
-import AirQuality from './AirQuality'
+import AirQuality from './AirQuality';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  useQuery,
+  gql,
+} from '@apollo/client';
 
+// set up Apollo Client
+const client = new ApolloClient({
+  uri: 'https://aqueous-sands-05141.herokuapp.com/graphql',
+  cache: new InMemoryCache(),
+});
 
-export default function App() {
-  const [airQuality, setAirQuality] = useState('');
-
-  const testLocation: any = {
-    latitude: 34.0522,
-    longitude: 118.2437,
-  };
-
-  const query = `
-    {
-      greeting (name:"Kevin"){
-        salutation
-      }
+// set up query constant
+const QUERY = gql`
+  {
+    greeting(name: "Kevin") {
+      salutation
     }
-  `;
+  }
+`;
 
-  const url = 'https://evening-waters-26376.herokuapp.com/graphql';
+// query function
+function Query() {
+  const { loading, error, data } = useQuery(QUERY);
 
-  const opts = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query }),
-  };
+  if (loading) return <Text>Loading...</Text>;
+  if (error) {
+    console.log('loading', loading, 'error', error, 'data', data);
+    return <Text>Error :(</Text>;
+  }
 
-  fetch(url, opts)
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      if (data) {
-        setAirQuality(JSON.stringify(data));
-      } else {
-        console.log('Cannon Retrieve Air Quality Data');
-      }
-    });
+  return <Text>{JSON.stringify(data)}</Text>;
+}
 
+
+// App Component 
+export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>{airQuality}</Text>
-      {/* <FireMap/> */}
-    </View>
+    <ApolloProvider client={client}>
+      <View style={styles.container}>
+        <Text>
+          <Query />
+        </Text>
+        <Text>To get started, edit App.js</Text>
+      </View>
+    </ApolloProvider>
   );
 }
 
+
+// Style Sheet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -56,5 +63,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
