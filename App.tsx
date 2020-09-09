@@ -34,10 +34,8 @@ function Query() {
     console.log('loading', loading, 'error', error, 'data', data);
     return <Text>Error :(</Text>;
   }
-
   return <Text>{JSON.stringify(data)}</Text>;
 }
-
 
 // App Component 
 export default function App() {
@@ -52,7 +50,6 @@ export default function App() {
     </ApolloProvider>
   );
 }
-
 
 // Style Sheet
 const styles = StyleSheet.create({
