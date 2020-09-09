@@ -9,13 +9,15 @@ const colors: Array<string> = [
   'rgba(255, 220, 0, 0.9)',
   'rgba(237, 124, 19, 0.9)',
   'rgba(255, 25, 0, 0.9)',
+  'rgba(181, 5, 32, 0.9)'
 ];
 
 // set up query constant
 const QUERY = gql`
   {
-    greeting(name: "Kevin") {
-      salutation
+    report (latitude: 140, longitude : 32) {
+      fires 
+      aqi
     }
   }
 `;
@@ -25,9 +27,9 @@ function Query() {
   const { loading, error, data } = useQuery(QUERY);
 
   if (loading) return <Text style={styles.text}>Loading...</Text>;
-  if (error) return <Text style={styles.text}>Error :(</Text>;
+  if (error) return <Text style={styles.text}>{JSON.stringify(error)}Error :(</Text>;
 
-  return <Text style={styles.text}>{data.greeting.salutation}</Text>;
+  return <Text style={styles.text}>{JSON.stringify(data)}</Text>;
 }
 
 const AirQuality = () => {
@@ -53,7 +55,7 @@ const AirQuality = () => {
         }}
       />
       <Query />
-      <Text style={styles.text}>_______ Air Quality</Text>
+      <Text style={styles.text}>Air Quality</Text>
     </View>
   );
 };

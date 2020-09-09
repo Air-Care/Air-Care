@@ -16,8 +16,8 @@ const FireMap: React.FC = () => {
 		const { status } = await Permissions.askAsync(Permissions.LOCATION);
 		if (status === 'granted') {
 			let location = await Location.getCurrentPositionAsync({});
-			console.log(location.coords.latitude);
-			console.log(location.coords.longitude);
+		//	console.log(location.coords.latitude);
+		//	console.log(location.coords.longitude);
 			setLatitude(location.coords.latitude);
 			setLongitude(location.coords.longitude);
 		} else {
