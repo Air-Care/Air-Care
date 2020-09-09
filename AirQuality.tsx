@@ -25,7 +25,7 @@ function Query() {
   const { loading, error, data } = useQuery(QUERY);
 
   if (loading) return <Text style={styles.text}>Loading...</Text>;
-  if (error) return <Text style={styles.text}>Error :(</Text>;
+  if (error) return <Text style={styles.text}>Error :</Text>;
 
   return <Text style={styles.text}>{data.greeting.salutation}</Text>;
 }
