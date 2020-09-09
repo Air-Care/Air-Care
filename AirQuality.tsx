@@ -1,7 +1,7 @@
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { gql, useQuery } from '@apollo/client';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 const colors: Array<string> = [
   'rgba(0,30,255, 0.9)',
@@ -39,7 +39,8 @@ const AirQuality = () => {
   y = colors[x + 1] ? x + 1 : x - 1;
 
   return (
-    <>
+    <View style={styles.container}>
+
       <LinearGradient
         // Background Linear Gradient
         colors={[colors[x], colors[y]]}
@@ -53,7 +54,7 @@ const AirQuality = () => {
       />
       <Query />
       <Text style={styles.text}>_______ Air Quality</Text>
-    </>
+    </View>
   );
 };
 
@@ -64,5 +65,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     fontSize: 18,
     color: '#fff',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

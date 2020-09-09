@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import FireMap from './Fire-Map';
-import AirQuality from './AirQuality';
+
 import {
   ApolloClient,
   InMemoryCache,
@@ -9,6 +8,7 @@ import {
   useQuery,
   gql,
 } from '@apollo/client';
+import Navigator from './Navigator';
 
 // set up Apollo Client
 const client = new ApolloClient({
@@ -23,7 +23,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <View style={styles.container}>
-        <AirQuality/>
+        <Navigator/>
       </View>
     </ApolloProvider>
   );
@@ -33,9 +33,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+   
     
   },
 });
