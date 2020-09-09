@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import MapView from 'react-native-maps';
+import Marker from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
@@ -37,7 +38,15 @@ const FireMap: React.FC = () => {
 				latitudeDelta: 0.0922,
 				longitudeDelta: 0.0421,
 			}}
-			/>
+			>
+			<Marker
+			coordinate={{
+				latitude: latitude,
+				longitude: longitude,
+			}}
+      description={"This is a marker in React Natve"}
+      />
+			</MapView>
 		</View>
 	);
 }
