@@ -23,8 +23,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <View style={styles.container}>
-        <AirQuality num={0}/>
-       
+        <AirQuality/>
       </View>
     </ApolloProvider>
   );

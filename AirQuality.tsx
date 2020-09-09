@@ -1,7 +1,7 @@
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { gql, useQuery } from '@apollo/client';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
 const colors: Array<string> = [
   'rgba(0,30,255, 0.9)',
@@ -27,11 +27,11 @@ function Query() {
   if (loading) return <Text style={styles.text}>Loading...</Text>;
   if (error) return <Text style={styles.text}>Error :(</Text>;
 
-  return <Text style={styles.text}>{JSON.stringify(data)}</Text>;
+  return <Text style={styles.text}>{data.greeting.salutation}</Text>;
 }
 
-const AirQuality = (props: any) => {
-  const { num } = props;
+const AirQuality = () => {
+  const num = 0;
 
   let x: number = num;
   let y: number;
@@ -52,7 +52,7 @@ const AirQuality = (props: any) => {
         }}
       />
       <Query />
-      <Text style={styles.text}>Air Quality</Text>
+      <Text style={styles.text}>_______ Air Quality</Text>
     </>
   );
 };
