@@ -1,3 +1,4 @@
+
 import React, { FunctionComponent } from 'react';
 import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, Animated } from 'react-native';
@@ -32,6 +33,7 @@ const FireMap: FunctionComponent<CoordProps> = ({latitude, longitude}) => {
 	// }
 
 	// Query();
+
 
 	return (
 		<View style={styles.container}>
