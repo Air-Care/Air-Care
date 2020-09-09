@@ -40,7 +40,8 @@ function Query() {
   const { loading, error, data } = useQuery(QUERY);
 
   if (loading) return <Text style={styles.text}>Loading...</Text>;
-  if (error) return <Text style={styles.text}>{JSON.stringify(error)}Error :(</Text>;
+
+  if (error) return <Text style={styles.text}>{JSON.stringify(error)}</Text>;
 
    aqi = data.report.aqi
   return <Text style={styles.text}>AQI : {aqi}</Text>;
