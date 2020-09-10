@@ -34,29 +34,26 @@ const QUERY = gql`
   }
 `;
 
-let aqi: number;
+let aqi: number = 99;
 // query function
 function Query() {
   const { loading, error, data } = useQuery(QUERY);
-
   if (loading) return <Text style={styles.text}>Loading...</Text>;
-
   if (error) return <Text style={styles.text}>{JSON.stringify(error)}</Text>;
-
-   aqi = data.report.aqi
-  return <Text style={styles.text}>AQI : {aqi}</Text>;
+  aqi = data.report.aqi
+  return ;
 }
+Query();
 
 const AirQuality = () => {
- let x = 0;
- x = Math.floor(9/20);
+
+  let x: number = Math.floor(aqi/20);
   let y: number;
 
   y = colors[x + 1] ? x + 1 : x - 1;
 
   return (
     <View style={styles.container}>
-
       <LinearGradient
         // Background Linear Gradient
         colors={[colors[x], colors[y]]}
@@ -68,10 +65,8 @@ const AirQuality = () => {
           height: '100%',
         }}
       />
-      <Text>{x}</Text>
       <Text style={styles.text}>{quality[x]} Air Quality</Text>
-      <Query />
-      
+      <Text style={styles.text}>AQI : {aqi}</Text>  
     </View>
   );
 };
