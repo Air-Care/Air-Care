@@ -1,36 +1,39 @@
-
 import React, { FunctionComponent, useRef, useEffect } from 'react';
 import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, Animated, Alert } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  Animated,
+  Alert,
+} from 'react-native';
 import { gql, useQuery } from '@apollo/client';
+import { latLong } from './App';
 
-type CoordProps = {
-	lat: number,
-	long: number
-}
+const FireMap: FunctionComponent = () => {
+  const locationData: any = latLong();
+  const lat: number = locationData[0];
+  const long: number = locationData[1];
 
-const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
+  let firesArray: any[] = [];
+  let allCoords: any[] = [{latitude: lat, longitude: long}];
 
-	const GET_FIRES = gql`
-		query Fire($latitude: Float, $longitude: Float) {
-			report(latitude: $latitude, longitude: $longitude) {
-				fires {
-					latitude
-					longitude
-					updateTime
-    		}
-			}
-		}
-	`;
-
-	let firesArray: any[] = [];
-	let allCoords: any[] = [{latitude: lat, longitude: long}];
-
-	(function FireRetriever(latitude: number, longitude: number) {
+  (function FireRetriever(latitude: number, longitude: number) {
+    const GET_FIRES = gql`
+      query Fire($latitude: Float, $longitude: Float) {
+        report(latitude: $latitude, longitude: $longitude) {
+          fires {
+            latitude
+            longitude
+						updateTime
+          }
+        }
+      }
+    `;
 		const { loading, error, data } = useQuery(GET_FIRES, {
 			variables: {latitude, longitude}
 		});
-
 		if (loading) return <Text style={styles.text}>Loading...</Text>;
 		if (error) return <Text style={styles.text}>Error :</Text>;
 		if (data.report.fires.length < 1) {
@@ -68,20 +71,18 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 				longitudeDelta: 0.0421,
 			}}
 			>
-
 			<Marker
-			coordinate={{
-				latitude: lat,
-				longitude: long,
-			}}
-      description={"This is your current location"}
-      >
-			<View style={styles.currentLocationWrap}>
-				<View style={styles.currentLocationRing} />
-				<View style={styles.currentLocation} />
-			</View>
+				coordinate={{
+					latitude: lat,
+					longitude: long,
+				}}
+				description={'This is your current location'}
+			>
+				<View style={styles.currentLocationWrap}>
+					<View style={styles.currentLocationRing} />
+					<View style={styles.currentLocation} />
+				</View>
 			</Marker>
-
 			{firesArray.map((obj) => {
 				allCoords.push({latitude: obj.latitude, longitude: obj.longitude});
 				return (
@@ -100,14 +101,13 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 					</Marker>
 				)
 			})}
-
 			</MapView>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
-	text: {
+  text: {
     backgroundColor: 'transparent',
     fontSize: 18,
     color: '#fff',
@@ -121,44 +121,44 @@ const styles = StyleSheet.create({
   mapStyle: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-	},
-	currentLocation: {
-		width: 8,
-		height: 8,
-		borderRadius: 4,
-		backgroundColor: '#1D8DFD'
-	},
-	currentLocationWrap: {
-    alignItems: "center",
-    justifyContent: "center",
-	},
-	currentLocationRing: {
+  },
+  currentLocation: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#1D8DFD',
+  },
+  currentLocationWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  currentLocationRing: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: "#7FB7EF",
-    position: "absolute",
+    backgroundColor: '#7FB7EF',
+    position: 'absolute',
     borderWidth: 1,
-    borderColor: "#013FD8",
-	},
-	fire: {
-		width: 10,
-		height: 10,
-		borderRadius: 5,
-		backgroundColor: '#EA2121'
-	},
-	fireWrap: {
-    alignItems: "center",
-    justifyContent: "center",
-	},
-	fireRing: {
+    borderColor: '#013FD8',
+  },
+  fire: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#EA2121',
+  },
+  fireWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fireRing: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: "#FF8080",
-    position: "absolute",
+    backgroundColor: '#FF8080',
+    position: 'absolute',
     borderWidth: 1,
-    borderColor: "#FF6666",
+    borderColor: '#FF6666',
   },
 });
 

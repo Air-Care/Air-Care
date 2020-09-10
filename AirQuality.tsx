@@ -2,14 +2,13 @@ import React, { FunctionComponent } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { gql, useQuery } from '@apollo/client';
 import { StyleSheet, Text, View } from 'react-native';
+import { latLong } from './App';
 
-type CoordProps = {
-	lat: number,
-	long: number
-}
+const AirQuality: FunctionComponent = () => {
+  const locationData: any = latLong();
+  const lat: number = locationData[0];
+  const long: number = locationData[1];
 
-const AirQuality: FunctionComponent<CoordProps> = ({lat, long}) => {
-  
   const colors: Array<string> = [
     'rgba(255, 25, 0, 0.9)',
     'rgba(237, 124, 19, 0.9)',
@@ -17,7 +16,7 @@ const AirQuality: FunctionComponent<CoordProps> = ({lat, long}) => {
     'rgba(59, 217, 180, 0.9)',
     'rgba(0, 187, 255, 0.9)',
     'rgba(60,0,255, 0.9)',
-    'rgba(60,0,255, 0.9)'
+    'rgba(60,0,255, 0.9)',
   ];
 
   const quality: Array<string> = [
@@ -26,21 +25,21 @@ const AirQuality: FunctionComponent<CoordProps> = ({lat, long}) => {
     'Moderate',
     'Good',
     'Excellent',
-    'Determining Air Quality'
+    'Determining Air Quality',
   ];
 
   // set up query constant
-  const QUERY = gql`
+
+  let aqi: number = 101;
+  // query function
+  function Query() {
+    const QUERY = gql`
   {
     report (latitude: ${lat}, longitude :  ${long}) {  
       aqi
     }
   }
 `;
-
-  let aqi: number = 101;
-  // query function
-  function Query() {
     const { loading, error, data } = useQuery(QUERY);
     if (loading) return <Text style={styles.text}>Loading...</Text>;
     if (error) return <Text style={styles.text}>{JSON.stringify(error)}</Text>;
@@ -51,9 +50,9 @@ const AirQuality: FunctionComponent<CoordProps> = ({lat, long}) => {
 
   let x: number = Math.floor(aqi / 20);
   let y: number;
+  console.log('LatLong IN AIR QUALITYU', latLong());
 
   y = colors[x + 1] ? x + 1 : x - 1;
-
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -68,7 +67,7 @@ const AirQuality: FunctionComponent<CoordProps> = ({lat, long}) => {
         }}
       />
       <Text style={styles.text}>{quality[x]} Air Quality</Text>
-       <Text></Text>
+      <Text></Text>
       <Text style={styles.text}>AQI : {aqi}</Text>
     </View>
   );
