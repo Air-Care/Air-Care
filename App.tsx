@@ -49,19 +49,23 @@ export default function App() {
 
   useEffect(() => {
     async function getLocationAsync() {
-      // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
-      const { status } = await Permissions.askAsync(Permissions.LOCATION);
-      if (status === 'granted') {
-        let location = await Location.getCurrentPositionAsync({});
-        setLatitude(location.coords.latitude);
-        setLongitude(location.coords.longitude);
-        setSavedCoord(Math.floor(location.coords.latitude));
-        console.log(latitude);
-        console.log(longitude);
-        console.log(savedCoord);
-        latLong([location.coords.latitude, location.coords.longitude]);
-      } else {
-        throw new Error('Location permission not granted');
+      try {
+        // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
+        const { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status === 'granted') {
+          let location = await Location.getCurrentPositionAsync({});
+          setLatitude(location.coords.latitude);
+          setLongitude(location.coords.longitude);
+          setSavedCoord(Math.floor(location.coords.latitude));
+          console.log(latitude);
+          console.log(longitude);
+          console.log(savedCoord);
+          latLong([location.coords.latitude, location.coords.longitude]);
+        } else {
+          throw new Error('Location permission not granted');
+        }
+      } catch(err) {
+        console.error(err)
       }
     }
 
