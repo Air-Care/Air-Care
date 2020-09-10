@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import FireMap from './Fire-Map';
+import AirQuality from './AirQuality'
 import Navigator from './Navigator';
 
 import {
@@ -17,13 +18,11 @@ import {
 
 // set up Apollo Client
 const client = new ApolloClient({
-  uri: 'https://aqueous-sands-05141.herokuapp.com/graphql',
+  uri: 'https://immense-escarpment-33083.herokuapp.com/graphql',
   cache: new InMemoryCache(),
 });
 
-const latLong: any = makeVar(3)
-
-latLong(5)
+ export const latLong: any = makeVar([])
 
 // App Component 
 export default function App() {
@@ -52,16 +51,17 @@ export default function App() {
     getLocationAsync();
   }, [savedCoord])
 
-  console.log('LatLong',latLong)
+  console.log('LatLong',latLong())
   return (
     <ApolloProvider client={client}>
       <View style={styles.container}>
-        {/* <Navigator/> */}
-        <FireMap latitude={latitude} longitude={longitude}/>
+    
+           <Navigator/> 
       </View>
     </ApolloProvider>
   );
 }
+
 
 // Style Sheet
 const styles = StyleSheet.create({
