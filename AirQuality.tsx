@@ -1,53 +1,55 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { gql, useQuery } from '@apollo/client';
 import { StyleSheet, Text, View } from 'react-native';
 
-const colors: Array<string> = [
- 
-  'rgba(255, 25, 0, 0.9)',
-  'rgba(237, 124, 19, 0.9)',
-  'rgba(255, 220, 0, 0.9)',
-  'rgba(59, 217, 180, 0.9)',
-  'rgba(0, 187, 255, 0.9)',
-  'rgba(60,0,255, 0.9)',
- 
-];
+type CoordProps = {
+	lat: number,
+	long: number
+}
 
-const quality: Array<string> = [
-  'Hazardous',
-  'Unhealthy',
-  'Moderate',
-  'Good',
-  'Excellent',
- 
+const AirQuality: FunctionComponent<CoordProps> = ({lat, long}) => {
   
- 
-]
+  const colors: Array<string> = [
+    'rgba(255, 25, 0, 0.9)',
+    'rgba(237, 124, 19, 0.9)',
+    'rgba(255, 220, 0, 0.9)',
+    'rgba(59, 217, 180, 0.9)',
+    'rgba(0, 187, 255, 0.9)',
+    'rgba(60,0,255, 0.9)',
+    'rgba(60,0,255, 0.9)'
+  ];
 
-// set up query constant
-const QUERY = gql`
+  const quality: Array<string> = [
+    'Hazardous',
+    'Unhealthy',
+    'Moderate',
+    'Good',
+    'Excellent',
+    'Determining Air Quality'
+  ];
+
+  // set up query constant
+  const QUERY = gql`
   {
-    report (latitude: 34.0522, longitude :  118.2437) {  
+    report (latitude: ${lat}, longitude :  ${long}) {  
       aqi
     }
   }
 `;
 
-let aqi: number = 99;
-// query function
-function Query() {
-  const { loading, error, data } = useQuery(QUERY);
-  if (loading) return <Text style={styles.text}>Loading...</Text>;
-  if (error) return <Text style={styles.text}>{JSON.stringify(error)}</Text>;
-  aqi = data.report.aqi
-  return ;
-}
-Query();
+  let aqi: number = 101;
+  // query function
+  function Query() {
+    const { loading, error, data } = useQuery(QUERY);
+    if (loading) return <Text style={styles.text}>Loading...</Text>;
+    if (error) return <Text style={styles.text}>{JSON.stringify(error)}</Text>;
+    aqi = data.report.aqi;
+    return;
+  }
+  Query();
 
-const AirQuality = () => {
-
-  let x: number = Math.floor(aqi/20);
+  let x: number = Math.floor(aqi / 20);
   let y: number;
 
   y = colors[x + 1] ? x + 1 : x - 1;
@@ -66,7 +68,8 @@ const AirQuality = () => {
         }}
       />
       <Text style={styles.text}>{quality[x]} Air Quality</Text>
-      <Text style={styles.text}>AQI : {aqi}</Text>  
+       <Text></Text>
+      <Text style={styles.text}>AQI : {aqi}</Text>
     </View>
   );
 };
