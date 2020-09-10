@@ -55,7 +55,7 @@ export default function App() {
     <ApolloProvider client={client}>
       <View style={styles.container}>
         {/* <Navigator/> */}
-        <FireMap lat={latitude} long={longitude}/>
+        <FireMap lat={34.2535129895} long={-117.88}/>
       </View>
     </ApolloProvider>
   );

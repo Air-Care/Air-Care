@@ -10,7 +10,7 @@ type CoordProps = {
 }
 
 const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
-	
+
 	const GET_FIRES = gql`
 		query Fire($latitude: Float, $longitude: Float) {
 			report(latitude: $latitude, longitude: $longitude) {
@@ -24,11 +24,7 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 	`;
 
 	let firesArray: any[] = [];
-	const testFireArray = [
-		{latitude: lat, longitude: long},
-		{latitude: 34.286283, longitude: -117.886211875},
-		{latitude: 34.2537008702, longitude: -117.9365212242}
-	];
+	let allCoords: any[] = [{latitude: lat, longitude: long}];
 
 	(function FireRetriever(latitude: number, longitude: number) {
 		const { loading, error, data } = useQuery(GET_FIRES, {
@@ -47,12 +43,17 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 		}
 		console.log('this is the fires array: ', data.report.fires)
 		firesArray = data.report.fires;
-	})(lat, long)
+	})(lat, long);
 
 	let mapRef = useRef(null);
 
 	useEffect(() => {
-		mapRef.current.fitToCoordinates(testFireArray)
+		mapRef.current.fitToCoordinates(allCoords, { edgePadding: {
+			top: 50,
+			right: 50,
+			bottom: 50,
+			left: 50
+		}})
 	})
 
 	return (
@@ -81,15 +82,16 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 			</View>
 			</Marker>
 
-			{testFireArray.map((obj) => {
+			{firesArray.map((obj) => {
+				allCoords.push({latitude: obj.latitude, longitude: obj.longitude});
 				return (
 					<Marker
-						key={obj.latitude++}
+						key={obj.latitude}
 						coordinate={{
 							latitude: obj.latitude,
 							longitude: obj.longitude,
 						}}
-						description={"This is a marker in React Natve"}
+						description={"This is a fire marker"}
 						>
 						<View style={styles.fireWrap}>
 							<View style={styles.fireRing} />
