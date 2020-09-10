@@ -12,6 +12,7 @@ import {
   ApolloProvider,
   useQuery,
   gql,
+  makeVar
 } from '@apollo/client';
 
 // set up Apollo Client
@@ -19,6 +20,10 @@ const client = new ApolloClient({
   uri: 'https://aqueous-sands-05141.herokuapp.com/graphql',
   cache: new InMemoryCache(),
 });
+
+const latLong: any = makeVar(3)
+
+latLong(5)
 
 // App Component 
 export default function App() {
@@ -38,6 +43,7 @@ export default function App() {
         console.log(latitude);
         console.log(longitude);
         console.log(savedCoord)
+        latLong([location.coords.latitude, location.coords.longitude])
       } else {
         throw new Error('Location permission not granted');
       }
@@ -46,6 +52,7 @@ export default function App() {
     getLocationAsync();
   }, [savedCoord])
 
+  console.log('LatLong',latLong)
   return (
     <ApolloProvider client={client}>
       <View style={styles.container}>
