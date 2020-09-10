@@ -1,5 +1,5 @@
 
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useRef, useEffect } from 'react';
 import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, Animated, Alert } from 'react-native';
 import { gql, useQuery } from '@apollo/client';
@@ -14,7 +14,7 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 	const GET_FIRES = gql`
 		query Fire($latitude: Float, $longitude: Float) {
 			report(latitude: $latitude, longitude: $longitude) {
-			# report(latitude: 34.04416081453157, longitude: -118.28635613425335) {
+			# report(latitude: 34.2535129895, longitude: -117.88) {
 				fires {
 					latitude
 					longitude
@@ -24,6 +24,11 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 	`;
 
 	let firesArray: any[] = [];
+	const testFireArray = [
+		{latitude: lat, longitude: long},
+		{latitude: 34.286283, longitude: -117.886211875},
+		{latitude: 34.2537008702, longitude: -117.9365212242}
+	];
 
 	(function FireRetriever(latitude: number, longitude: number) {
 		const { loading, error, data } = useQuery(GET_FIRES, {
@@ -44,9 +49,16 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 		firesArray = data.report.fires;
 	})(lat, long)
 
+	let mapRef = useRef(null);
+
+	useEffect(() => {
+		mapRef.current.fitToCoordinates(testFireArray)
+	})
+
 	return (
 		<View style={styles.container}>
 			<MapView
+			ref={mapRef}
 			style={styles.mapStyle}
 			region={{
 				latitude: lat,
@@ -54,9 +66,6 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 				latitudeDelta: 0.0922,
 				longitudeDelta: 0.0421,
 			}}
-			// onMapReady={() => {
-			// 	this.mapRef.fitToCoordinates()
-			// }}
 			>
 
 			<Marker
@@ -72,7 +81,7 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 			</View>
 			</Marker>
 
-			{firesArray.map((obj) => {
+			{testFireArray.map((obj) => {
 				return (
 					<Marker
 						key={obj.latitude++}

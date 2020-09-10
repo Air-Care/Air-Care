@@ -24,7 +24,9 @@ const client = new ApolloClient({
 export default function App() {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
-  const [savedCoord, setSavedCoord] = useState(0)
+  const [savedCoord, setSavedCoord] = useState(0);
+
+  console.log(client.cache)
   
   useEffect(() => {
     async function getLocationAsync() {
