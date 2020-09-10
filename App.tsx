@@ -8,6 +8,7 @@ import AirQuality from './AirQuality';
 import Navigator from './Navigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Animation from './animation'
 
 import {
   ApolloClient,
@@ -79,6 +80,7 @@ export default function App() {
         <NavigationContainer>
           <MyTabs />
         </NavigationContainer>
+        {/* <Animation/> */}
       </View>
     </ApolloProvider>
   );

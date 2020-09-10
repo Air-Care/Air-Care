@@ -5,7 +5,9 @@ import {
   Text,
   View,
   Dimensions,
+  TouchableOpacity,
   Animated,
+  Easing,
   Alert,
 } from 'react-native';
 import { gql, useQuery } from '@apollo/client';
@@ -44,9 +46,29 @@ const FireMap: FunctionComponent = () => {
 				{ cancelable: false }
 			);
 		}
-		console.log('this is the fires array: ', data.report.fires)
-		firesArray = data.report.fires;
-	})(lat, long);
+		// console.log('this is the fires array: ', data.report.fires)
+    firesArray = data.report.fires;
+  })(lat, long);
+  
+  const getLastUpdated = (lastUpdated: String) => {
+    let d = new Date();
+    let convertedDate = d.getUTCDate();
+    let convertedTime = d.getUTCHours();
+
+    let dateSliced = parseInt(lastUpdated.slice(8, 10));
+    let timeSliced = parseInt(lastUpdated.slice(11, 13));
+
+    // if date is different
+    if (convertedDate - dateSliced === 1) return 24 - timeSliced + convertedTime;
+    else if (convertedDate - dateSliced > 1) {
+      let days = convertedDate - dateSliced
+      let timeDiff = 24 - timeSliced + convertedTime
+      return `${days} days and ${timeDiff}`
+    }
+
+    // if date is the same
+    return convertedTime - timeSliced;
+  }
 
 	let mapRef = useRef(null);
 
@@ -56,8 +78,8 @@ const FireMap: FunctionComponent = () => {
 			right: 75,
 			bottom: 75,
 			left: 75
-		}})
-	})
+    }});
+  })
 
 	return (
 		<View style={styles.container}>
@@ -83,8 +105,8 @@ const FireMap: FunctionComponent = () => {
 					<View style={styles.currentLocation} />
 				</View>
 			</Marker>
-			{firesArray.map((obj) => {
-				allCoords.push({latitude: obj.latitude, longitude: obj.longitude});
+			{firesArray.map((obj, index) => {
+        allCoords.push({latitude: obj.latitude, longitude: obj.longitude});
 				return (
 					<Marker
 						key={obj.latitude}
@@ -92,12 +114,12 @@ const FireMap: FunctionComponent = () => {
 							latitude: obj.latitude,
 							longitude: obj.longitude,
 						}}
-						description={"This is a fire marker"}
+						description={`Last updated ${getLastUpdated(obj.updateTime)} hours ago`}
 						>
 						<View style={styles.fireWrap}>
 							<View style={styles.fireRing} />
 							<View style={styles.fire} />
-						</View>
+            </View>
 					</Marker>
 				)
 			})}
