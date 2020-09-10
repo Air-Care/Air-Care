@@ -17,6 +17,7 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 				fires {
 					latitude
 					longitude
+					updateTime
     		}
 			}
 		}
@@ -48,10 +49,10 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 
 	useEffect(() => {
 		mapRef.current.fitToCoordinates(allCoords, { edgePadding: {
-			top: 50,
-			right: 50,
-			bottom: 50,
-			left: 50
+			top: 75,
+			right: 75,
+			bottom: 75,
+			left: 75
 		}})
 	})
 

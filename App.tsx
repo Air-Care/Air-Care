@@ -13,11 +13,12 @@ import {
   ApolloProvider,
   useQuery,
   gql,
+  makeVar
 } from '@apollo/client';
 
 // set up Apollo Client
 const client = new ApolloClient({
-  uri: 'https://aqueous-sands-05141.herokuapp.com/graphql',
+  uri: 'https://immense-escarpment-33083.herokuapp.com/graphql',
   cache: new InMemoryCache(),
 });
 
@@ -27,8 +28,6 @@ export default function App() {
   const [longitude, setLongitude] = useState(0);
   const [savedCoord, setSavedCoord] = useState(0);
 
-  console.log(client.cache)
-  
   useEffect(() => {
     async function getLocationAsync() {
       try {
@@ -56,8 +55,9 @@ export default function App() {
     <ApolloProvider client={client}>
       <View style={styles.container}>
         {/* <Navigator/> */}
-        <FireMap lat={34.2535129895} long={-117.88}/>
-        <AirQuality lat={latitude} long={longitude}/>
+        <FireMap lat={latitude} long={longitude}/>
+        {/* <FireMap lat={34.2535129895} long={-117.88}/> */}
+        {/* <AirQuality lat={latitude} long={longitude}/> */}
       </View>
     </ApolloProvider>
   );
@@ -71,3 +71,4 @@ const styles = StyleSheet.create({
     
   },
 });
+
