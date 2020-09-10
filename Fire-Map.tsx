@@ -1,47 +1,56 @@
 
 import React, { FunctionComponent } from 'react';
 import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, Animated } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Animated, Alert } from 'react-native';
 import { gql, useQuery } from '@apollo/client';
 
 type CoordProps = {
-	latitude: number,
-	longitude: number
+	lat: number,
+	long: number
 }
 
-const FireMap: FunctionComponent<CoordProps> = ({latitude, longitude}) => {
+const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
+	
+	const GET_FIRES = gql`
+		query Fire($latitude: Float, $longitude: Float) {
+			report(latitude: $latitude, longitude: $longitude) {
+			# report(latitude: 34.04416081453157, longitude: -118.28635613425335) {
+				fires {
+					latitude
+					longitude
+    		}
+			}
+		}
+	`;
 
-	// let firesArray = [];
+	let firesArray: any[] = [];
 
-	// const QUERY = gql`
-  // {
-  //   reports(latitude: latitude, longitude: longitude) {
-  //     fire
-	// 		aqi
-  //   }
-  // }
-	// `;
+	(function FireRetriever(latitude: number, longitude: number) {
+		const { loading, error, data } = useQuery(GET_FIRES, {
+			variables: {latitude, longitude}
+		});
 
-	// function Query() {
-	// 	const { loading, error, data } = useQuery(QUERY);
-
-	// 	if (loading) return <Text style={styles.text}>Loading...</Text>;
-	// 	if (error) return <Text style={styles.text}>Error :</Text>;
-
-	// 	firesArray = data.report.fires;
-	// 	console.log(firesArray)
-	// }
-
-	// Query();
-
+		if (loading) return <Text style={styles.text}>Loading...</Text>;
+		if (error) return <Text style={styles.text}>Error :</Text>;
+		if (data.report.fires.length < 1) {
+			Alert.alert(
+				'No fires in your area',
+				'Whew!',
+				[{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+				{ cancelable: false }
+			);
+		}
+		console.log('this is the fires array: ', data.report.fires)
+		firesArray = data.report.fires;
+	})(lat, long)
 
 	return (
 		<View style={styles.container}>
 			<MapView
 			style={styles.mapStyle}
 			region={{
-				latitude: latitude,
-				longitude: longitude,
+				latitude: lat,
+				longitude: long,
 				latitudeDelta: 0.0922,
 				longitudeDelta: 0.0421,
 			}}
@@ -49,10 +58,11 @@ const FireMap: FunctionComponent<CoordProps> = ({latitude, longitude}) => {
 			// 	this.mapRef.fitToCoordinates()
 			// }}
 			>
+
 			<Marker
 			coordinate={{
-				latitude: latitude,
-				longitude: longitude,
+				latitude: lat,
+				longitude: long,
 			}}
       description={"This is your current location"}
       >
@@ -61,30 +71,25 @@ const FireMap: FunctionComponent<CoordProps> = ({latitude, longitude}) => {
 				<View style={styles.currentLocation} />
 			</View>
 			</Marker>
-			<Marker
-			coordinate={{
-				latitude: 34.2535129895,
-				longitude: -117.9370215097,
-			}}
-			description={"This is a marker in React Natve"}
-      >
-			<View style={styles.fireWrap}>
-				<View style={styles.fireRing} />
-				<View style={styles.fire} />
-			</View>
-			</Marker>
-			<Marker
-			coordinate={{
-				latitude: 34.2863373684,
-				longitude: -117.8866046053,
-			}}
-      description={"This is a marker in React Natve"}
-      >
-			<View style={styles.fireWrap}>
-				<View style={styles.fireRing} />
-				<View style={styles.fire} />
-			</View>
-			</Marker>
+
+			{firesArray.map((obj) => {
+				return (
+					<Marker
+						key={obj.latitude++}
+						coordinate={{
+							latitude: obj.latitude,
+							longitude: obj.longitude,
+						}}
+						description={"This is a marker in React Natve"}
+						>
+						<View style={styles.fireWrap}>
+							<View style={styles.fireRing} />
+							<View style={styles.fire} />
+						</View>
+					</Marker>
+				)
+			})}
+
 			</MapView>
 		</View>
 	);
@@ -126,9 +131,9 @@ const styles = StyleSheet.create({
     borderColor: "#013FD8",
 	},
 	fire: {
-		width: 8,
-		height: 8,
-		borderRadius: 4,
+		width: 10,
+		height: 10,
+		borderRadius: 5,
 		backgroundColor: '#EA2121'
 	},
 	fireWrap: {
@@ -136,9 +141,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
 	},
 	fireRing: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: "#FF8080",
     position: "absolute",
     borderWidth: 1,
