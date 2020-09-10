@@ -14,7 +14,6 @@ const FireMap: FunctionComponent<CoordProps> = ({lat, long}) => {
 	const GET_FIRES = gql`
 		query Fire($latitude: Float, $longitude: Float) {
 			report(latitude: $latitude, longitude: $longitude) {
-			# report(latitude: 34.2535129895, longitude: -117.88) {
 				fires {
 					latitude
 					longitude

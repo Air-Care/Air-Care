@@ -1,26 +1,18 @@
-import React from 'react-native'
-import Swiper from 'react-native-swiper'
 import FireMap from './Fire-Map';
-import Map from './AirQuality';
-import SwipeNavigator from 'react-native-swipe-navigation'
-import { StyleSheet, Text, View } from 'react-native';
-
-
+import AirQuality from './AirQuality';
+import SwipeNavigator from 'react-native-swipe-navigation';
 
 const Navigator = SwipeNavigator({
-  Map: {
-    screen: Map,
-    
+  AirQuality: {
+    screen: AirQuality,
+
     right: 'FireMap',
-   
   },
 
   FireMap: {
-    screen:FireMap,
-    type: 'place', // push is the default type
+    screen: FireMap,
+    left: 'AirQuality',
   },
+});
 
- 
-})
-
-export default Navigator
+export default Navigator;

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import FireMap from './Fire-Map';
+import AirQuality from './AirQuality'
 import Navigator from './Navigator';
 
 import {
@@ -56,6 +57,7 @@ export default function App() {
       <View style={styles.container}>
         {/* <Navigator/> */}
         <FireMap lat={34.2535129895} long={-117.88}/>
+        <AirQuality lat={latitude} long={longitude}/>
       </View>
     </ApolloProvider>
   );
