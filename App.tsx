@@ -43,7 +43,6 @@ export default function App() {
         <NavigationContainer>
           <TabBar userLocation={userLocation} />
         </NavigationContainer>
-        {/* <Animation/> */}
       </View>
     </ApolloProvider>
   );

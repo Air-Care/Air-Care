@@ -22,10 +22,31 @@ query Fire($latitude: Float, $longitude: Float) {
     fires {
       latitude
       longitude
+      updateTime
     }
   }
 }
 `;
+
+const getLastUpdated = (lastUpdated: String) => {
+  let d = new Date();
+  let convertedDate = d.getUTCDate();
+  let convertedTime = d.getUTCHours();
+
+  let dateSliced = parseInt(lastUpdated.slice(8, 10));
+  let timeSliced = parseInt(lastUpdated.slice(11, 13));
+
+  // if date is different
+  if (convertedDate - dateSliced === 1) return 24 - timeSliced + convertedTime;
+  else if (convertedDate - dateSliced > 1) {
+    let days = convertedDate - dateSliced
+    let timeDiff = 24 - timeSliced + convertedTime
+    return `${days} days and ${timeDiff}`
+  }
+
+  // if date is the same
+  return convertedTime - timeSliced;
+}
 
 export const FireMap = ({ userLocation }: {userLocation: Coord}) => {
   const { latitude, longitude } = userLocation;
@@ -48,6 +69,7 @@ export const FireMap = ({ userLocation }: {userLocation: Coord}) => {
     }
     allCoords = allCoords.concat(fires)
   }
+
 
   // Re-fit the map view when allCoords changes
   useEffect(() => {
@@ -85,11 +107,11 @@ export const FireMap = ({ userLocation }: {userLocation: Coord}) => {
         </Marker>
         {/* !! The map params shadow latitude / longitude vars !! */}
         {data && data.report.fires.map(
-          ({ latitude, longitude }: {latitude: number, longitude: number}) => (
+          ({ latitude, longitude, updateTime }: {latitude: number, longitude: number, updateTime: string}) => (
             <Marker
               key={`${latitude}-${longitude}`}
               coordinate={{ latitude, longitude }}
-              description={"This is a fire marker"}
+              description={`Last updated ${getLastUpdated(updateTime)} hours ago`}
             >
               <View style={fireWrap}>
                 <View style={fireRing} />
